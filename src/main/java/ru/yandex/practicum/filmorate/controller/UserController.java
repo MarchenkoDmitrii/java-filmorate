@@ -44,8 +44,8 @@ public class UserController {
     }
 
     @PutMapping("/users")
-    public User update(@RequestBody User user){
-        if (users.containsKey(user.getId())){
+    public User update(@RequestBody User user) {
+        if (users.containsKey(user.getId())) {
             users.put(user.getId(), user);
         } else {
             throw new ValidationException("Нет такого пользователя", HttpStatus.NOT_FOUND);

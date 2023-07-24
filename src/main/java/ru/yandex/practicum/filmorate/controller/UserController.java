@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
@@ -46,12 +45,11 @@ public class UserController {
 
     @PutMapping("/users")
     public User update(@RequestBody User user){
-
         if (users.containsKey(user.getId())){
             users.put(user.getId(), user);
+        } else {
+            throw new ValidationException("Нет такого пользователя", HttpStatus.NOT_FOUND);
         }
-
-        else throw new ValidationException("Нет такого пользователя", HttpStatus.NOT_FOUND);
         return user;
     }
 }

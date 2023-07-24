@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -43,12 +42,13 @@ public class FilmController {
         return film;
     }
     @PutMapping("/films")
-    public Film update(@RequestBody Film film){
-
-        if (films.containsKey(film.getId())){
+    public Film update(@RequestBody Film film) {
+        if (films.containsKey(film.getId())) {
             films.put(film.getId(), film);
         }
-        else throw new ValidationException("Нет такого пользователя", HttpStatus.NOT_FOUND);
+        else {
+            throw new ValidationException("Нет такого пользователя", HttpStatus.NOT_FOUND);
+        }
         return film;
     }
 }

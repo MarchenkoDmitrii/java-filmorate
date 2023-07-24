@@ -41,12 +41,12 @@ public class FilmController {
         films.put(film.getId(), film);
         return film;
     }
+
     @PutMapping("/films")
     public Film update(@RequestBody Film film) {
         if (films.containsKey(film.getId())) {
             films.put(film.getId(), film);
-        }
-        else {
+        } else {
             throw new ValidationException("Нет такого пользователя", HttpStatus.NOT_FOUND);
         }
         return film;

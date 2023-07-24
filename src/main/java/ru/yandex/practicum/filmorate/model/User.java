@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
 import java.time.LocalDate;
+
 @lombok.Data
 public class User {
     private int id;

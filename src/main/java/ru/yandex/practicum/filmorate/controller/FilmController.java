@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 public class FilmController {
@@ -23,7 +24,7 @@ public class FilmController {
     public List<Film> findAll() {
         if (films.equals(null))
             throw new ValidationException("Нет фильмов", HttpStatus.NO_CONTENT);
-        return films.values().stream().toList();
+        return films.values().stream().collect(Collectors.toList());
     }
 
     @PostMapping("/films")

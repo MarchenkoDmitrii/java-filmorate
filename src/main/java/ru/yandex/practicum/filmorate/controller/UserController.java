@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 public class UserController {
@@ -24,7 +25,7 @@ public class UserController {
     public List<User> findAll() {
         if (users.entrySet().size() == 0)
             throw new ValidationException("Нет пользователей", HttpStatus.NOT_FOUND);
-        return users.values().stream().toList();
+        return users.values().stream().collect(Collectors.toList());
     }
 
     @PostMapping("/users")

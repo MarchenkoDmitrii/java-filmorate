@@ -14,19 +14,20 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/films")
 public class FilmController {
     private int id = 0;
-    Map<Integer, Film> films = new HashMap<>();
+    private Map<Integer, Film> films = new HashMap<>();
     private static final Logger log = LoggerFactory.getLogger(FilmController.class);
 
-    @GetMapping("/films")
+    @GetMapping
     public List<Film> findAll() {
         if (films.equals(null))
             throw new ValidationException("Нет фильмов", HttpStatus.NO_CONTENT);
         return films.values().stream().collect(Collectors.toList());
     }
 
-    @PostMapping("/films")
+    @PostMapping
     public Film create(@RequestBody Film film) {
         if (film.getName().equals("") || film.getName().isEmpty())
             throw new ValidationException("название не может быть пустым", HttpStatus.NOT_FOUND);
@@ -42,7 +43,7 @@ public class FilmController {
         return film;
     }
 
-    @PutMapping("/films")
+    @PutMapping
     public Film update(@RequestBody Film film) {
         if (films.containsKey(film.getId())) {
             films.put(film.getId(), film);

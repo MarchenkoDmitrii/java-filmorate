@@ -15,19 +15,20 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/users")
 public class UserController {
     protected int id = 0;
-    Map<Integer, User> users = new HashMap<>();
+    private Map<Integer, User> users = new HashMap<>();
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
-    @GetMapping("/users")
+    @GetMapping
     public List<User> findAll() {
         if (users.entrySet().size() == 0)
             throw new ValidationException("Нет пользователей", HttpStatus.NOT_FOUND);
         return users.values().stream().collect(Collectors.toList());
     }
 
-    @PostMapping("/users")
+    @PostMapping
     public User create(@RequestBody User user) {
         if ((user.getLogin().contains(" ")) || (user.getLogin().equals(null)))
             throw new ValidationException("логин не может быть пустым и содержать пробелы", HttpStatus.BAD_REQUEST);
@@ -43,7 +44,7 @@ public class UserController {
         return user;
     }
 
-    @PutMapping("/users")
+    @PutMapping
     public User update(@RequestBody User user) {
         if (users.containsKey(user.getId())) {
             users.put(user.getId(), user);

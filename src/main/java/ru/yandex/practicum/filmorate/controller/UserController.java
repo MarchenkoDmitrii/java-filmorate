@@ -30,6 +30,8 @@ public class UserController {
 
     @PostMapping
     public User create(@RequestBody User user) {
+        if (Optional.ofNullable(user).isEmpty())
+            throw new ValidationException("Попытка добавить пустое значение", HttpStatus.BAD_REQUEST);
         if ((user.getLogin().contains(" ")) || (user.getLogin().equals(null)))
             throw new ValidationException("логин не может быть пустым и содержать пробелы", HttpStatus.BAD_REQUEST);
         if ((!user.getEmail().contains("@")) || (user.getEmail().equals(null)))

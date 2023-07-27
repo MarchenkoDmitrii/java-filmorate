@@ -8,10 +8,7 @@ import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @RestController
 @RequestMapping("/films")
@@ -22,13 +19,15 @@ public class FilmController {
 
     @GetMapping
     public List<Film> findAll() {
-        if (films.equals(null))
+        if (films.entrySet().size() == 0)
             throw new ValidationException("Нет фильмов", HttpStatus.NO_CONTENT);
-        return films.values().stream().collect(Collectors.toList());
+        return new ArrayList<>(films.values());
     }
 
     @PostMapping
     public Film create(@RequestBody Film film) {
+        if (Optional.ofNullable(film).isEmpty())
+            throw new ValidationException("Попытка добавить пустое значение", HttpStatus.BAD_REQUEST);
         if (film.getName().equals("") || film.getName().isEmpty())
             throw new ValidationException("название не может быть пустым", HttpStatus.NOT_FOUND);
         if (film.getDescription().length() > 200)

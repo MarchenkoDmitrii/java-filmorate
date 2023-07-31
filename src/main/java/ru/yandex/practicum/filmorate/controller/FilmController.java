@@ -23,7 +23,6 @@ public class FilmController {
             throw new ValidationException("Нет фильмов", HttpStatus.NO_CONTENT);
         return new ArrayList<>(films.values());
     }
-
     @PostMapping
     public Film create(@RequestBody Film film) {
         if (Optional.ofNullable(film).isEmpty())

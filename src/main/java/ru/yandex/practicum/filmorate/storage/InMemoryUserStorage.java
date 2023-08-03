@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
-public class InMemoryUserStorage implements UserStorage{
+public class InMemoryUserStorage implements UserStorage {
     protected Long id = 0L;
     private final Map<Long, User> users = new HashMap<>();
     private final Map<Long, Set<Long>> friendList = new HashMap<>();
@@ -36,7 +36,7 @@ public class InMemoryUserStorage implements UserStorage{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "электронная почта не может быть пустой и должна содержать символ @");
         if (user.getBirthday().isAfter(LocalDate.now()))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "дата рождения не может быть в будущем.");
-        if (user.getName().isEmpty() ) {
+        if (user.getName().isEmpty()) {
             user.setName(user.getLogin());
         }
         user.setId(++id);

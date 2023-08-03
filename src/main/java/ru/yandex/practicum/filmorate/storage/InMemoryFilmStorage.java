@@ -16,7 +16,6 @@ public class InMemoryFilmStorage implements FilmStorage {
     private Long id = 0L;
     private final Map<Long, Film> films = new HashMap<>();
     private final Map<Long,List<Long>> likes = new HashMap<>();
-    InMemoryUserStorage inMemoryUserStorage;
     private static final Logger log = LoggerFactory.getLogger(FilmController.class);
 
     @Override

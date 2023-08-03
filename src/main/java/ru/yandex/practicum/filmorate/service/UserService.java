@@ -33,19 +33,19 @@ public class UserService {
        return new ArrayList<>(friendsList);
     }
 
-    public User getUser(Long id){
+    public User getUser(Long id) {
         return userStorage.getUser(id);
     }
 
-    public List<User> findAll(){
+    public List<User> findAll() {
         return userStorage.findAll();
     }
 
-    public User create(User user){
+    public User create(User user) {
         return userStorage.create(user);
     }
 
-    public User update(User user){
+    public User update(User user) {
         return userStorage.update(user);
     }
 }

@@ -14,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
     private final UserStorage userStorage;
+
     public List<User> getFriends(Long id) {
         return userStorage.findAllFriendsById(id);
     }

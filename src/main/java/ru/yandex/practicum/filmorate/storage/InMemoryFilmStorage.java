@@ -77,7 +77,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public List<Film> removeLike(Long idFilm, Long idUser) {
-        if (!films.containsKey(idFilm) )
+        if (!films.containsKey(idFilm))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Такого фильма или юзера нет");
         likes.get(idFilm).remove(idUser);
         return likes.get(idFilm).stream()

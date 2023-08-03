@@ -25,15 +25,15 @@ public class FilmService {
         return filmStorage.removeLike(idUser,idFriend);
     }
 
-    public List<Film> getPopularFilms(int count){
+    public List<Film> getPopularFilms(int count) {
         return filmStorage.getPopularFilms(count);
     }
 
-    public Film getFilm(Long id){
+    public Film getFilm(Long id) {
         return filmStorage.getFilm(id);
     }
 
-    public List<Film> findAll(){
+    public List<Film> findAll() {
         return filmStorage.findAll();
     }
 
@@ -41,7 +41,7 @@ public class FilmService {
         return filmStorage.create(film);
     }
 
-    public Film update(Film film){
+    public Film update(Film film) {
         return filmStorage.update(film);
     }
 }

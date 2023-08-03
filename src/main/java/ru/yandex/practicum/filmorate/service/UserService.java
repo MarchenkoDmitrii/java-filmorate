@@ -26,7 +26,7 @@ public class UserService {
         return userStorage.deleteOneFriend(idUser,idFriend);
     }
 
-    public List<User> getCommonFriends(Long id, Long otherId){
+    public List<User> getCommonFriends(Long id, Long otherId) {
         List<User> friendsList = userStorage.findAllFriendsById(id);
         List<User> otherFriendsList = userStorage.findAllFriendsById(otherId);
        friendsList.retainAll(otherFriendsList);

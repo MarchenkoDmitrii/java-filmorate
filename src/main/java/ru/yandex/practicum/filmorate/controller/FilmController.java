@@ -25,6 +25,7 @@ public class FilmController {
     public List<Film> findAll() {
         return new ArrayList<>(filmService.findAll());
     }
+
     @PostMapping
     public Film create(@RequestBody Film film) {
         return filmService.create(film);
@@ -39,6 +40,7 @@ public class FilmController {
         }
         return film;
     }
+
     @PutMapping("/{id}/like/{userId}")
     public void addLike(@PathVariable Long id,
                         @PathVariable Long userId) {
@@ -54,7 +56,9 @@ public class FilmController {
     public List<Film> getMostPopulars(@RequestParam(defaultValue = "10", required = false) int count) {
         return new ArrayList<>(filmService.getPopularFilms(count));
     }
+
     @GetMapping("/{id}")
     public Film getFilm(@PathVariable Long id) {
         return filmService.getFilm(id);
-    }}
+    }
+}

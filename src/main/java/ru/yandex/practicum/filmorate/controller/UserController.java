@@ -36,6 +36,7 @@ public class UserController {
         }
         return user;
     }
+
     @PutMapping("/{id}/friends/{friendId}")
     public List<User> addFriend(@PathVariable Long id, @PathVariable Long friendId) {
         return userService.addFriend(id, friendId);
@@ -55,6 +56,7 @@ public class UserController {
     public List<User> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
         return userService.getCommonFriends(id, otherId);
     }
+
     @GetMapping("/{id}")
     public User getUser(@PathVariable Long id) {
         if (Optional.ofNullable(userService.getUser(id)).isEmpty())

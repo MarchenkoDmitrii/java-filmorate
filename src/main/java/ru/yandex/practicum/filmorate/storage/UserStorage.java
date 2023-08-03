@@ -10,9 +10,7 @@ public interface UserStorage {
     User update(@RequestBody User user);
     User getUserById(Long id);
     List<User> findAllFriendsById(Long id);
-
     List<User> saveOneFriend(Long idUser, Long idFriend);
-
     List<User> deleteOneFriend(Long idUser, Long idFriend);
     User getUser(Long id);
 

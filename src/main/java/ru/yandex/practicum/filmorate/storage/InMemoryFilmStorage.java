@@ -56,15 +56,15 @@ public class InMemoryFilmStorage implements FilmStorage {
     public List<Film> getPopularFilms(int count) {
         if (likes.values().isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"нет лайков");
         List<Film> popularFilms = new ArrayList<>();
-        List<List<Long>> sortedLikes = likes.values().stream()
-                .sorted(Comparator.comparingLong(List::size))
+        Map<Long,List<Long>> sortedLikes = likes.entrySet().stream()
+                .sorted(Comparator.comparingLong(entry -> entry.getValue().size()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+        return  sortedLikes.keySet().stream()
+                .sorted(Comparator.reverseOrder())
+                .limit(count)
+                .map(films::get)
                 .collect(Collectors.toList());
-        for (List<Long> sortedLike : sortedLikes) {
-            for (Long aLong : sortedLike) {
-                popularFilms.add(getFilm(aLong));
-            }
-        }
-        return popularFilms;
     }
 
     @Override
@@ -77,7 +77,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public List<Film> removeLike(Long idFilm, Long idUser) {
-        if (!films.containsKey(idFilm))
+        if (!films.containsKey(idFilm) || !likes.get(idFilm).contains(idUser))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Такого фильма или юзера нет");
         likes.get(idFilm).remove(idUser);
         return likes.get(idFilm).stream()

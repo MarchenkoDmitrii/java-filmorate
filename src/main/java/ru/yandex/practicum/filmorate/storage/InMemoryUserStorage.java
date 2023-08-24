@@ -75,7 +75,7 @@ public class InMemoryUserStorage implements UserStorage {
         if (!(users.containsKey(idUser) && users.containsKey(idFriend)))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Нет таких пользователей");
          friendList.get(idUser).add(idFriend);
-         friendList.get(idFriend).add(idUser);
+         if (friendList.get(idFriend).contains(idUser)) users.get(idUser).setConformedFriendship(true);
         return friendList.get(idUser).stream()
                 .map(users::get)
                 .collect(Collectors.toList());

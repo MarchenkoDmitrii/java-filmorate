@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class InMemoryFilmStorage implements FilmStorage {
     private Long id = 0L;
     private final Map<Long, Film> films = new HashMap<>();
-    private final Map<Long,List<Long>> likes = new HashMap<>();
+    private final Map<Long, List<Long>> likes = new HashMap<>();
     private static final Logger log = LoggerFactory.getLogger(FilmController.class);
 
     @Override
@@ -55,11 +55,10 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public List<Film> getPopularFilms(int count) {
         if (likes.values().isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"нет лайков");
-        List<Film> popularFilms = new ArrayList<>();
         Map<Long,List<Long>> sortedLikes = likes.entrySet().stream()
                 .sorted(Comparator.comparingLong(entry -> entry.getValue().size()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+                        (oldValue, newValue) -> oldValue, HashMap::new));
         return  sortedLikes.keySet().stream()
                 .sorted(Comparator.reverseOrder())
                 .limit(count)

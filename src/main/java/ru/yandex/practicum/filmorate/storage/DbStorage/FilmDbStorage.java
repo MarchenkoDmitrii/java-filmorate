@@ -118,6 +118,7 @@ public class FilmDbStorage implements FilmStorage {
 
         String sqlQueryDeleteGenres = "delete from GENRES_FILMS " +
                 "where FILM_ID = ?";
+
         jdbcTemplate.update(sqlQueryDeleteGenres, film.getId());
         if (film.getGenres() != null && !film.getGenres().isEmpty()) {
             for (Genre genre : film.getGenres()) {
@@ -139,7 +140,6 @@ public class FilmDbStorage implements FilmStorage {
                 "GROUP BY f.FILM_ID " +
                 "ORDER BY LIKE_COUNT DESC " +
                 "LIMIT ?";
-        System.out.println(sqlQuery);
         films = jdbcTemplate.query(sqlQuery, new FilmMapper(), count);
 
         for (Film film : films) {
@@ -168,12 +168,12 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public List<Film> createLike(Long idFilm, Long idUser) {
         String sql = "SELECT COUNT(*) FROM FILMS WHERE FILM_ID = ?";
-        if (jdbcTemplate.queryForObject(sql,Integer.class, idFilm) == 0) {
+        if (jdbcTemplate.queryForObject(sql, Integer.class, idFilm) == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Нет такого фильма");
         }
         String sql1 = "SELECT COUNT(*) FROM USERS WHERE USER_ID = ?";
         if (jdbcTemplate.queryForObject(sql1, Integer.class, idUser) == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Нет такого ");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Нет такого юзера");
         }
 
         String sqlQuery = "INSERT INTO LIKES_FILMS (FILM_ID, USER_ID) VALUES(?, ?)";
@@ -193,7 +193,7 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public List<Film> removeLike(Long idFilm, Long idUser) {
         String sql = "SELECT COUNT(*) FROM LIKES_FILMS WHERE FILM_ID = ? AND USER_ID = ?";
-        if (jdbcTemplate.queryForObject(sql,Integer.class,idFilm ,idUser) == 0) {
+        if (jdbcTemplate.queryForObject(sql, Integer.class,idFilm, idUser) == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Нет такого фильма");
         }
 

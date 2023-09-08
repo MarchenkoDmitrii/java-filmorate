@@ -18,7 +18,7 @@ public class FilmValidate {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895,12,1)))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "дата релиза — не раньше 28 декабря 1895 года");
         if (film.getDuration() < 0)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"продолжительность фильма должна быть положительной");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "продолжительность фильма должна быть положительной");
         return film;
     }
 }

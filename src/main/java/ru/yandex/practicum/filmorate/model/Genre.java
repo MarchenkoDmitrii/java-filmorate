@@ -20,7 +20,6 @@ public class Genre implements Comparable <Genre> {
     public Genre() {
     }
 
-
     @Override
     public int compareTo(Genre o) {
         int result = this.id - o.getId();

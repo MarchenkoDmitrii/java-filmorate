@@ -13,7 +13,9 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 public class MpaService {
+
     private final DbMpaStorage mpaStorage;
+
     public List<Mpa> getMpa() {
         return mpaStorage.findAll();
     }

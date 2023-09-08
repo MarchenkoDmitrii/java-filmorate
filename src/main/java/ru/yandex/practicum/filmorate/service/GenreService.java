@@ -13,7 +13,9 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 public class GenreService {
+
     private final DbGenreStorage filmDbStorage;
+
     public List<Genre> getGenres() {
         return filmDbStorage.findAll();
     }

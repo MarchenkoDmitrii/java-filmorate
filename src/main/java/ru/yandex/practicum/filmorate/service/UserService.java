@@ -14,6 +14,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class UserService {
+
     private final UserDbStorage userStorage;
 
     public List<User> getFriends(Long id) {
@@ -21,17 +22,19 @@ public class UserService {
     }
 
     public void addFriend(Long idUser, Long idFriend) {
-        userStorage.saveOneFriend(idUser,idFriend);
+        userStorage.saveOneFriend(idUser, idFriend);
     }
 
     public List<User> removeFriend(Long idUser, Long idFriend) {
-        return userStorage.deleteOneFriend(idUser,idFriend);
+        return userStorage.deleteOneFriend(idUser, idFriend);
     }
 
     public List<User> getCommonFriends(Long id, Long otherId) {
+
         List<User> friendsList = userStorage.findAllFriendsById(id);
         List<User> otherFriendsList = userStorage.findAllFriendsById(otherId);
-       friendsList.retainAll(otherFriendsList);
+        friendsList.retainAll(otherFriendsList);
+
        return new ArrayList<>(friendsList);
     }
 

@@ -6,7 +6,6 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 import java.util.*;
 
-
 @RestController
 @RequestMapping("/users")
 @Slf4j
@@ -22,13 +21,13 @@ public class UserController {
 
     @PostMapping
     public User create(@RequestBody User user) {
-        log.info("Получен пользователь "+ user.getName());
+        log.info("Получен пользователь " + user.getName());
         return userService.create(user);
     }
 
     @PutMapping
     public User update(@RequestBody User user) {
-        log.info("Обновлен пользователь "+ user.getName());
+        log.info("Обновлен пользователь " + user.getName());
         return userService.update(user);
     }
 

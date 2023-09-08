@@ -25,13 +25,13 @@ public class FilmController {
 
     @PostMapping
     public Film create(@RequestBody Film film) {
-        log.info("Получена сущность Film "+ film.getName());
+        log.info("Получена сущность Film " + film.getName());
         return filmService.create(film);
     }
 
     @PutMapping
     public Film update(@RequestBody Film film) {
-        log.info("Обновлена сущность Film "+ film.getName());
+        log.info("Обновлена сущность Film " + film.getName());
         return filmService.update(film);
     }
 

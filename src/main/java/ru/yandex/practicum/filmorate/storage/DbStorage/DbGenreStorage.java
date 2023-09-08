@@ -24,6 +24,7 @@ public class DbGenreStorage implements GenreStorage {
     @Override
     @Transactional
     public List<Genre> findAll() {
+
         String sqlQuery = "select * from GENRES";
 
         List<Genre> genres = jdbcTemplate.query(sqlQuery, new GenreMapper());
@@ -36,6 +37,7 @@ public class DbGenreStorage implements GenreStorage {
     @Override
     @Transactional
     public Optional<Genre> getById(Integer id) {
+
         String sql = "SELECT COUNT(*) FROM GENRES WHERE GENRE_ID = ?";
         if (jdbcTemplate.queryForObject(sql, Integer.class, id) == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Нет такого фильма");

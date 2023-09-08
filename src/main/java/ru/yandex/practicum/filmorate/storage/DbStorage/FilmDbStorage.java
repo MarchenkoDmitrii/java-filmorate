@@ -44,7 +44,6 @@ public class FilmDbStorage implements FilmStorage {
                     sqlQuery = "SELECT g.* FROM GENRES_FILMS gf\n" +
                             "JOIN GENRES g ON g.GENRE_ID = gf.GENRE_ID\n" +
                             "WHERE gf.FILM_ID = ?";
-                if (Optional.ofNullable(film.getGenres()) == null){}
                 genres = jdbcTemplate.query(sqlQuery, (rs, rowNum) -> {
                         Genre genre = new Genre(
                                 rs.getInt("GENRE_ID"),
@@ -58,6 +57,7 @@ public class FilmDbStorage implements FilmStorage {
         }
         return films;
     }
+
     @Override
     @Transactional
     public Film create(Film film) {
@@ -88,7 +88,7 @@ public class FilmDbStorage implements FilmStorage {
                     jdbcTemplate.update(sql, genre.getId(), filmId);
                 }
             }
-        film.setId( (long) filmId);
+        film.setId((long) filmId);
         return film;
     }
 
@@ -190,6 +190,7 @@ public class FilmDbStorage implements FilmStorage {
         return result;
 
     }
+
     @Override
     public List<Film> removeLike(Long idFilm, Long idUser) {
         String sql = "SELECT COUNT(*) FROM LIKES_FILMS WHERE FILM_ID = ? AND USER_ID = ?";

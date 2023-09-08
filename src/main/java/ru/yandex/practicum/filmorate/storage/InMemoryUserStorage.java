@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class InMemoryUserStorage implements UserStorage {
     protected Long id = 0L;
     private final Map<Long, User> users = new HashMap<>();
-    private final Map<Long, Set<Long>> friendList = new HashMap<>();
+    private final Map<Long, Map<Long, Boolean>> friendList = new HashMap<>();
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     @Override
@@ -42,7 +42,7 @@ public class InMemoryUserStorage implements UserStorage {
         user.setId(++id);
         this.id = user.getId();
         users.put(user.getId(), user);
-        friendList.put(user.getId(), new HashSet<>());
+        friendList.put(user.getId(), new HashMap<>());
         return user;
     }
 
@@ -65,20 +65,21 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public List<User> findAllFriendsById(Long id) {
         if (!friendList.containsKey(id)) throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Нет такого пользователя");
-        return friendList.get(id).stream()
+        return friendList.get(id).keySet().stream()
                 .map(users::get)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<User> saveOneFriend(Long idUser, Long idFriend) {
+    public void saveOneFriend(Long idUser, Long idFriend) {
         if (!(users.containsKey(idUser) && users.containsKey(idFriend)))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Нет таких пользователей");
-         friendList.get(idUser).add(idFriend);
-         if (friendList.get(idFriend).contains(idUser)) users.get(idUser).setConformedFriendship(true);
-        return friendList.get(idUser).stream()
-                .map(users::get)
-                .collect(Collectors.toList());
+         friendList.get(idUser).put(idFriend, false);
+         if (friendList.get(idFriend).containsKey(idUser)) {
+             friendList.get(idUser).put(idFriend, true);
+         }else {
+             friendList.get(idUser).put(idFriend, false);
+         }
     }
 
     @Override
@@ -86,14 +87,10 @@ public class InMemoryUserStorage implements UserStorage {
         if (!users.containsKey(idUser) || !users.containsKey(idFriend))
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Нет таких пользователей");
          friendList.get(idUser).remove(idFriend);
-         friendList.get(idFriend).remove(idUser);
-        return friendList.get(idUser).stream()
+         friendList.get(idFriend).put(idUser, false);
+        return friendList.get(idUser).keySet().stream()
                 .map(users::get)
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public User getUser(Long id) {
-        return users.get(id);
-    }
 }

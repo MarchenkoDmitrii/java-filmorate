@@ -116,7 +116,7 @@ public class UserDbStorage implements UserStorage {
         if (jdbcTemplate.queryForObject(sql, Integer.class, idUser) == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Нет такого юзера");
         }
-        if (jdbcTemplate.queryForObject(sql, Integer.class, idFriend) == 0){
+        if (jdbcTemplate.queryForObject(sql, Integer.class, idFriend) == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Нет такого юзера");
         }
         boolean common = (jdbcTemplate.queryForObject("SELECT COUNT(*) FROM FRIEND_USER WHERE USER_ID = " + idFriend

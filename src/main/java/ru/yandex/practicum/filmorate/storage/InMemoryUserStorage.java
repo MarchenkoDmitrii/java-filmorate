@@ -77,7 +77,7 @@ public class InMemoryUserStorage implements UserStorage {
          friendList.get(idUser).put(idFriend, false);
          if (friendList.get(idFriend).containsKey(idUser)) {
              friendList.get(idUser).put(idFriend, true);
-         }else {
+         } else {
              friendList.get(idUser).put(idFriend, false);
          }
     }

@@ -40,12 +40,11 @@ public class DbGenreStorage implements GenreStorage {
 
         String sql = "SELECT COUNT(*) FROM GENRES WHERE GENRE_ID = ?";
         if (jdbcTemplate.queryForObject(sql, Integer.class, id) == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Нет такого фильма");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Нет такого жанра");
         }
-        String sqlQuery = "select * from GENRES where GENRE_ID = ?";
 
         Genre genre = jdbcTemplate.queryForObject(
-                sqlQuery,
+                "select * from GENRES where GENRE_ID = ?",
                 new GenreMapper(),
                 id
         );

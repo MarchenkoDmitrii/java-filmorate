@@ -21,7 +21,6 @@ import java.util.List;
 @Repository
 @Slf4j
 @RequiredArgsConstructor
-@Component
 public class UserDbStorage implements UserStorage {
     private final JdbcTemplate jdbcTemplate;
 

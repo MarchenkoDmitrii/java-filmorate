@@ -11,11 +11,11 @@ public class UserValidate {
         if (user == null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Попытка добавить пустое значение");
         if ((user.getLogin().contains(" ")) || (user.getLogin().equals("asd")))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "название не может быть пустым");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Название не может быть пустым");
         if ((!user.getEmail().contains("@")) || (user.getEmail().equals(null)))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "электронная почта не может быть пустой и должна содержать символ @");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Электронная почта не может быть пустой и должна содержать символ @");
         if (user.getBirthday().isAfter(LocalDate.now()))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "дата рождения не может быть в будущем.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Дата рождения не может быть в будущем.");
         if (user.getName().isEmpty() || user.getName().equals(""))
             user.setName(user.getLogin());
         return user;

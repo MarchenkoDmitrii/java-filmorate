@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,7 +23,6 @@ import java.util.*;
 @Repository
 @Slf4j
 @RequiredArgsConstructor
-@Component
 public class FilmDbStorage implements FilmStorage {
     private final JdbcTemplate jdbcTemplate;
 
@@ -123,7 +121,6 @@ public class FilmDbStorage implements FilmStorage {
         if (film.getGenres() != null && !film.getGenres().isEmpty()) {
             for (Genre genre : film.getGenres()) {
                 String sql = "INSERT INTO GENRES_FILMS (GENRE_ID, FILM_ID) VALUES (?, ?)";
-                System.out.println(sql + " " + genre.getId() + " " + film.getId());
                 jdbcTemplate.update(sql, genre.getId(), film.getId());
             }
         }

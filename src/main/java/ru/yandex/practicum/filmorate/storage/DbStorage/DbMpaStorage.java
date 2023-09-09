@@ -34,14 +34,13 @@ public class DbMpaStorage implements MpaStorage {
     @Override
     @Transactional
     public Optional<Mpa> getById(Integer id) {
-        String sql = "SELECT COUNT(*) FROM MPA WHERE RATING_ID = ?";
-        if (jdbcTemplate.queryForObject(sql, Integer.class, id) == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Нет такого фильма");
-        }
-        String sqlQuery = "select * from MPA where RATING_ID = ?";
 
+        String sqlQuery = "select count(*) from MPA where RATING_ID = ?";
+        if (jdbcTemplate.queryForObject(sqlQuery, Integer.class, id) == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Нет такого рейтинга");
+        }
         Mpa mpa = jdbcTemplate.queryForObject(
-                sqlQuery,
+                "select * from MPA where RATING_ID = ?",
                 new MpaMapper(),
                 id
         );

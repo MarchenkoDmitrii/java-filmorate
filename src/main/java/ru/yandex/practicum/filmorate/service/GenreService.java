@@ -14,13 +14,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GenreService {
 
-    private final DbGenreStorage filmDbStorage;
+    private final DbGenreStorage dbGenreStorage;
 
     public List<Genre> getGenres() {
-        return filmDbStorage.findAll();
+        return dbGenreStorage.findAll();
     }
 
     public Optional<Genre> getGenre(Integer id) {
-        return filmDbStorage.getById(id);
+        return dbGenreStorage.getById(id);
     }
 }

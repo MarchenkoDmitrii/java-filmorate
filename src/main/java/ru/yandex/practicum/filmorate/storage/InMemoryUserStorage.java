@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.validate.UserValidate;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -28,17 +29,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User create(User user) {
-        if (user == null)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Попытка добавить пустое значение");
-        if ((user.getLogin().contains(" ")) || (user.getLogin().equals("asd")))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "название не может быть пустым");
-        if ((!user.getEmail().contains("@")) || (user.getEmail().equals(null)))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "электронная почта не может быть пустой и должна содержать символ @");
-        if (user.getBirthday().isAfter(LocalDate.now()))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "дата рождения не может быть в будущем.");
-        if (user.getName().isEmpty()) {
-            user.setName(user.getLogin());
-        }
+        UserValidate.validate(user);
         user.setId(++id);
         this.id = user.getId();
         users.put(user.getId(), user);

@@ -7,7 +7,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.model.Film;
-import java.time.LocalDate;
+import ru.yandex.practicum.filmorate.validate.FilmValidate;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,16 +26,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film create(Film film) {
-        if (Optional.ofNullable(film).isEmpty())
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Попытка добавить пустое значение");
-        if (film.getName().equals("") || film.getName().isEmpty())
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "название не может быть пустым");
-        if (film.getDescription().length() > 200)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "максимальная длина описания — 200 символов");
-        if (film.getReleaseDate().isBefore(LocalDate.of(1895,12,1)))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "дата релиза — не раньше 28 декабря 1895 года");
-        if (film.getDuration() < 0)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"продолжительность фильма должна быть положительной");
+        FilmValidate.validate(film);
         film.setId(++id);
         this.id = film.getId();
         films.put(film.getId(), film);
@@ -58,7 +50,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         Map<Long,List<Long>> sortedLikes = likes.entrySet().stream()
                 .sorted(Comparator.comparingLong(entry -> entry.getValue().size()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                        (oldValue, newValue) -> oldValue, HashMap::new));
+                        (oldValue, newValue) -> oldValue, TreeMap::new));
         return  sortedLikes.keySet().stream()
                 .sorted(Comparator.reverseOrder())
                 .limit(count)

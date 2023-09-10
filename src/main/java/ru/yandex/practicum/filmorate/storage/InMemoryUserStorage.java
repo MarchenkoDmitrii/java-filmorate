@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.validate.UserValidate;
 
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class InMemoryUserStorage implements UserStorage {
     protected Long id = 0L;
     private final Map<Long, User> users = new HashMap<>();
-    private final Map<Long, Set<Long>> friendList = new HashMap<>();
+    private final Map<Long, Map<Long, Boolean>> friendList = new HashMap<>();
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     @Override
@@ -28,21 +28,11 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User create(User user) {
-        if (user == null)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Попытка добавить пустое значение");
-        if ((user.getLogin().contains(" ")) || (user.getLogin().equals("asd")))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "название не может быть пустым");
-        if ((!user.getEmail().contains("@")) || (user.getEmail().equals(null)))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "электронная почта не может быть пустой и должна содержать символ @");
-        if (user.getBirthday().isAfter(LocalDate.now()))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "дата рождения не может быть в будущем.");
-        if (user.getName().isEmpty()) {
-            user.setName(user.getLogin());
-        }
+        UserValidate.validate(user);
         user.setId(++id);
         this.id = user.getId();
         users.put(user.getId(), user);
-        friendList.put(user.getId(), new HashSet<>());
+        friendList.put(user.getId(), new HashMap<>());
         return user;
     }
 
@@ -65,20 +55,21 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public List<User> findAllFriendsById(Long id) {
         if (!friendList.containsKey(id)) throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Нет такого пользователя");
-        return friendList.get(id).stream()
+        return friendList.get(id).keySet().stream()
                 .map(users::get)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<User> saveOneFriend(Long idUser, Long idFriend) {
+    public void saveOneFriend(Long idUser, Long idFriend) {
         if (!(users.containsKey(idUser) && users.containsKey(idFriend)))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Нет таких пользователей");
-         friendList.get(idUser).add(idFriend);
-         friendList.get(idFriend).add(idUser);
-        return friendList.get(idUser).stream()
-                .map(users::get)
-                .collect(Collectors.toList());
+         friendList.get(idUser).put(idFriend, false);
+         if (friendList.get(idFriend).containsKey(idUser)) {
+             friendList.get(idUser).put(idFriend, true);
+         } else {
+             friendList.get(idUser).put(idFriend, false);
+         }
     }
 
     @Override
@@ -86,14 +77,10 @@ public class InMemoryUserStorage implements UserStorage {
         if (!users.containsKey(idUser) || !users.containsKey(idFriend))
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Нет таких пользователей");
          friendList.get(idUser).remove(idFriend);
-         friendList.get(idFriend).remove(idUser);
-        return friendList.get(idUser).stream()
+         friendList.get(idFriend).put(idUser, false);
+        return friendList.get(idUser).keySet().stream()
                 .map(users::get)
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public User getUser(Long id) {
-        return users.get(id);
-    }
 }

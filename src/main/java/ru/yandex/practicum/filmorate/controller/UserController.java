@@ -1,13 +1,10 @@
 package ru.yandex.practicum.filmorate.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 import java.util.*;
-
 
 @RestController
 @RequestMapping("/users")
@@ -24,22 +21,21 @@ public class UserController {
 
     @PostMapping
     public User create(@RequestBody User user) {
+        log.info("Получен пользователь " + user.getName());
         return userService.create(user);
     }
 
     @PutMapping
     public User update(@RequestBody User user) {
-        if (Optional.ofNullable(userService.getUser(user.getId())).isPresent()) {
-            userService.update(user);
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Юзера нет");
-        }
-        return user;
+        log.info("Обновлен пользователь " + user.getName());
+        return userService.update(user);
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public List<User> addFriend(@PathVariable Long id, @PathVariable Long friendId) {
-        return userService.addFriend(id, friendId);
+    public void addFriend(@PathVariable Long id, @PathVariable Long friendId) {
+        log.info("Заявка на добавление в друзья от " + getUser(friendId).getName() + "к пользователю "
+                + getUser(id).getName());
+        userService.addFriend(id, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
@@ -59,8 +55,6 @@ public class UserController {
 
     @GetMapping("/{id}")
     public User getUser(@PathVariable Long id) {
-        if (Optional.ofNullable(userService.getUser(id)).isEmpty())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Юзера нет");
         return userService.getUser(id);
     }
 }

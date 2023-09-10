@@ -3,45 +3,45 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
-import java.util.List;
+import ru.yandex.practicum.filmorate.storage.DbStorage.FilmDbStorage;
 
+import java.util.List;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class FilmService {
-    private final FilmStorage filmStorage;
+    private final FilmDbStorage filmDbStorage;
 
     public List<Film> getLikes(int count) {
-        return filmStorage.getPopularFilms(count);
+        return filmDbStorage.getPopularFilms(count);
     }
 
     public List<Film> addLike(Long idUser, Long idFriend) {
-        return filmStorage.createLike(idUser,idFriend);
+        return filmDbStorage.createLike(idUser,idFriend);
     }
 
     public List<Film> removeLike(Long idUser, Long idFriend) {
-        return filmStorage.removeLike(idUser,idFriend);
+        return filmDbStorage.removeLike(idUser,idFriend);
     }
 
     public List<Film> getPopularFilms(int count) {
-        return filmStorage.getPopularFilms(count);
+        return filmDbStorage.getPopularFilms(count);
     }
 
     public Film getFilm(Long id) {
-        return filmStorage.getFilm(id);
+        return filmDbStorage.getFilm(id);
     }
 
     public List<Film> findAll() {
-        return filmStorage.findAll();
+        return filmDbStorage.findAll();
     }
 
     public Film create(Film film) {
-        return filmStorage.create(film);
+        return filmDbStorage.create(film);
     }
 
     public Film update(Film film) {
-        return filmStorage.update(film);
+        return filmDbStorage.update(film);
     }
 }
